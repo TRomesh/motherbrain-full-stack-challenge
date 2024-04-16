@@ -7,7 +7,6 @@ function FilterBar({
   selectLabel,
   searchLabel,
   onSelect,
-  onSearch,
   onFilterchange,
 }: {
   options?: DropDownType[] | null;
@@ -15,17 +14,9 @@ function FilterBar({
   selectLabel?: string;
   searchLabel?: string;
   onFilterchange?: (filters: object) => void;
-  onSearch?: (value: string) => void;
 }) {
   const [searchValue, setSearchValue] = useState("");
   const [selectValue, setSelectValue] = useState("");
-
-  const handleSearchChange = (
-    e: SyntheticEvent<HTMLElement, Event>,
-    value?: any
-  ) => {
-    setSearchValue(value);
-  };
 
   const handleDropdownChange = (
     e: SyntheticEvent<HTMLElement, Event>,
@@ -38,6 +29,7 @@ function FilterBar({
   const onChangeHandler = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       const { value } = event.target;
+      setSearchValue(value);
       debounce(() => {
         if (onFilterchange) onFilterchange({ company_name: value });
       }, 300)();
@@ -49,22 +41,12 @@ function FilterBar({
     // Reset both the search input and the dropdown
     setSelectValue("");
     setSearchValue("");
-    if (onFilterchange) onFilterchange({});
+    if (onFilterchange) onFilterchange({ company_name: "__" });
     if (onSelect) onSelect("");
   };
 
   return (
     <Menu>
-      {onSearch?.length ? (
-        <Menu.Item>
-          <Input
-            value={searchValue}
-            onChange={handleSearchChange}
-            placeholder={`Search for ${searchLabel}`}
-          />
-        </Menu.Item>
-      ) : null}
-
       {options?.length ? (
         <Menu.Item>
           <Dropdown
@@ -74,7 +56,7 @@ function FilterBar({
             selection
             value={selectValue}
             options={options}
-            style={{ width: 200 }}
+            style={{ width: "350px" }}
             onChange={handleDropdownChange}
           />
         </Menu.Item>
@@ -83,8 +65,10 @@ function FilterBar({
       {onFilterchange ? (
         <Menu.Item>
           <Input
-            placeholder="Company Name"
+            value={searchValue}
             onChange={onChangeHandler}
+            style={{ width: "350px" }}
+            placeholder={`Search for ${searchLabel}`}
           />
         </Menu.Item>
       ) : null}

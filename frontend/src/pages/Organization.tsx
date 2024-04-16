@@ -13,9 +13,9 @@ function Organization() {
 
   return (
     <div>
-      <Header>Leading Investors</Header>
+      <Header>Leading Organization</Header>
       <FilterBar
-        selectLabel="Organization"
+        searchLabel="Organization"
         onFilterchange={onFilterchange}
       />
       {organization?.length ? (

@@ -24,7 +24,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "dev": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -48,10 +48,7 @@
     ]
   },
   "devDependencies": {
-    "@types/d3-fetch": "^3.0.7",
-    "@types/d3-scale": "^4.0.8",
     "@types/lodash.debounce": "^4.0.9",
-    "@types/react-simple-maps": "^3.0.4",
     "@types/topojson-client": "^3.1.4"
   }
 }

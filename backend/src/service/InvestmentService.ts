@@ -1,5 +1,6 @@
 import NodeCache from "node-cache";
 import { Client } from "@elastic/elasticsearch";
+import { clearData } from "../util/common";
 
 export class InvestmentService {
   private cache: NodeCache;
@@ -96,19 +97,7 @@ export class InvestmentService {
 
     const result = await this.executeQuery("funding", query);
     if (result && result.aggregations) {
-      const cleanedInvestors = result.aggregations.investors.buckets
-        .map((bucket: any) => {
-          let name = bucket.key;
-          // Remove leading and trailing special characters and JSON artifacts
-          name = name.replace(/^\{["']?|["']?\}$/g, ""); // Remove curly braces and optional quotes at the start/end
-          return {
-            name: name,
-            count: bucket.doc_count,
-          };
-        })
-        .filter((investor: any) => {
-          return investor.name.length !== 0;
-        });
+      const cleanedInvestors = clearData(result.aggregations.investors.buckets);
 
       this.cache.set("investor_names", cleanedInvestors);
 
@@ -311,8 +300,6 @@ export class InvestmentService {
     };
 
     const result = await this.executeQuery("funding", query);
-    console.log("result", result);
-
     if (result && result.hits && result.hits.hits.length > 0) {
       return result.hits.hits.map((hit: any) => hit._source.company_name);
     }
