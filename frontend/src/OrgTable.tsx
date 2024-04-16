@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 export default function OrgTable() {
   const [isLoading, setIsLoading] = useState(true);
-  const [orgs, setOrgs] = useState([]);
+  const [orgs, setOrgs] = useState<
+    { uuid: string; company_name: string; short_description: string }[]
+  >([]);
 
   useEffect(() => {
     const url = new URL("http://localhost:8080/orgs");
-    url.searchParams.set("limit", 20);
-    url.searchParams.set("offset", 0);
+    url.searchParams.set("limit", "20");
+    url.searchParams.set("offset", "0");
 
     fetch(url)
       .then((response) => response.json())
